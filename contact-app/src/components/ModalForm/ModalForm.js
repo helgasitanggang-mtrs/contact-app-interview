@@ -24,6 +24,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function CustomizedDialogs(props) {
+  const { firstName, lastName, age, imagePreview } = props.data;
   return (
     <React.Fragment>
       <BootstrapDialog
@@ -58,21 +59,52 @@ export default function CustomizedDialogs(props) {
               <Box>
                 <TextField
                   id="first-name"
+                  name="firstName"
                   label="First Name"
+                  value={firstName}
+                  onChange={props.handleChange}
                   variant="outlined"
                 />
               </Box>
               <Box>
                 <TextField
                   id="last-name"
+                  name="lastName"
                   label="Last Name"
+                  value={lastName}
+                  onChange={props.handleChange}
+                  variant="outlined"
+                />
+              </Box>
+              <Box>
+                <TextField
+                  id="age"
+                  name="age"
+                  label="age"
+                  value={age}
+                  onKeyDown={props.handleDelete}
+                  onChange={props.handleChange}
                   variant="outlined"
                 />
               </Box>
               <Box>
                 <FormControl>
+                <Box>
+                      {imagePreview && (
+                        <img
+                          style={{ height: "90px", width: "90px" }}
+                          src={imagePreview}
+                          alt="Preview"
+                        />
+                      )}
+                    </Box>
                   <Box>
-                    <Input id="photo-upload" type="file" onChange={props.onUploadFile}/>
+                    <Input
+                      id="photo-upload"
+                      name="image"
+                      type="file"
+                      onChange={props.handleChange}
+                    />
                   </Box>
                 </FormControl>
               </Box>
@@ -80,7 +112,7 @@ export default function CustomizedDialogs(props) {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={props.handleClose}>
+          <Button autoFocus onClick={props.handleSubmit}>
             Save changes
           </Button>
         </DialogActions>

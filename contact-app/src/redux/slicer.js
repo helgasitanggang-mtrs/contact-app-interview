@@ -1,15 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts } from './actions';
+import { fetchContacts, postContacts, resetAll, getContactById } from './actions';
 
-const contactSlice = createSlice({
-    name: 'contact',
-    initialState: {
-        contacts: [],
+const initialState = {
+    contacts: [],
         loading: false,
         isError: false,
         errorMessage: null,
+        responseStatus: null,
+        contact: {},
+        contactGetByIdMessage: null
+}
 
-    },
+const contactSlice = createSlice({
+    name: 'contact',
+    initialState,
     extraReducers: (builder) => {
         builder
             .addCase(fetchContacts.pending, (state) => {
@@ -24,7 +28,35 @@ const contactSlice = createSlice({
                 state.loading = false;
                 state.isError = true;
                 state.errorMessage = action.payload;
-            });
+            })
+            .addCase(postContacts.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(postContacts.fulfilled, (state, action) => {
+                state.responseStatus = 201;
+                state.loading = false;
+                state.isError = null;
+            })
+            .addCase(postContacts.rejected, (state, action) => {
+                state.loading = false;
+                state.isError = true;
+                state.errorMessage = action.payload;
+            })
+            .addCase(getContactById.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getContactById.fulfilled, (state, action) => {
+                state.contact = action.payload;
+                state.loading = false;
+                state.isError = null;
+                state.contactGetByIdMessage = 'success';
+            })
+            .addCase(getContactById.rejected, (state, action) => {
+                state.loading = false;
+                state.isError = true;
+                state.errorMessage = action.payload;
+            })
+            .addCase(resetAll, () => initialState)
     }
 });
 
