@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Paper, Grid, Box, Typography } from "@mui/material";
+import {useDispatch, useSelector} from 'react-redux';
 import axios from "axios";
 
+import { fetchContacts } from "../redux/actions";
 import ListCard from "../components/ListCard/ListCard";
 import ButtonCustom from "../components/Button/Button";
 import ModalForm from "../components/ModalForm/ModalForm";
@@ -14,6 +16,8 @@ const config = {
 }
 
 export default function LayoutWithPaper() {
+    const dispatch = useDispatch();
+    const contactData = useSelector(state => state);
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => setOpen(true);
@@ -35,6 +39,13 @@ export default function LayoutWithPaper() {
       photo: "N/A",
     },
   ];
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  console.log(contactData);
 
   const onUploadFile = async (e) => {
     const image = new FormData();
