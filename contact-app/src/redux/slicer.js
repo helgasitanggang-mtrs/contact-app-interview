@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts, postContacts, resetAll, getContactById } from './actions';
+import { fetchContacts, postContacts, resetAll, getContactById, updateContactById, deleteContactById } from './actions';
 
 const initialState = {
     contacts: [],
@@ -52,6 +52,32 @@ const contactSlice = createSlice({
                 state.contactGetByIdMessage = 'success';
             })
             .addCase(getContactById.rejected, (state, action) => {
+                state.loading = false;
+                state.isError = true;
+                state.errorMessage = action.payload;
+            })
+            .addCase(updateContactById.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateContactById.fulfilled, (state, action) => {
+                state.responseStatus = 201;
+                state.loading = false;
+                state.isError = null;
+            })
+            .addCase(updateContactById.rejected, (state, action) => {
+                state.loading = false;
+                state.isError = true;
+                state.errorMessage = action.payload;
+            })
+            .addCase(deleteContactById.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(deleteContactById.fulfilled, (state, action) => {
+                state.responseStatus = 202;
+                state.loading = false;
+                state.isError = null;
+            })
+            .addCase(deleteContactById.rejected, (state, action) => {
                 state.loading = false;
                 state.isError = true;
                 state.errorMessage = action.payload;

@@ -1,5 +1,4 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import {
   Dialog,
@@ -10,9 +9,12 @@ import {
   TextField,
   FormControl,
   Input,
-  Box,
+  Button,
+  Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+
+import { constant } from "../../constants/constant";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -32,9 +34,10 @@ export default function CustomizedDialogs(props) {
         aria-labelledby="customized-dialog-title"
         open={props.open}
         fullWidth
+        maxWidth="sm"
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Modal title
+          {props?.data?.id ? "Edit Contact" : "Add Contact"}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -49,71 +52,67 @@ export default function CustomizedDialogs(props) {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-          <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-          >
-            <form noValidate autoComplete="off">
-              <Box>
-                <TextField
-                  id="first-name"
-                  name="firstName"
-                  label="First Name"
-                  value={firstName}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                id="first-name"
+                name="firstName"
+                label={constant.form.firstName}
+                value={firstName}
+                onChange={props.handleChange}
+                variant="outlined"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="last-name"
+                name="lastName"
+                label={constant.form.lastName}
+                value={lastName}
+                onChange={props.handleChange}
+                variant="outlined"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="age"
+                name="age"
+                label={constant.cardList.age}
+                value={age}
+                onKeyDown={props.handleDelete}
+                onChange={props.handleChange}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                {imagePreview && (
+                  <img
+                    style={{ height: "90px", width: "90px" }}
+                    src={imagePreview}
+                    alt="Preview"
+                  />
+                )}
+                <Input
+                  id="photo-upload"
+                  name="imagePreview"
+                  type="file"
+                  data-testid="image-upload" // for testing
                   onChange={props.handleChange}
-                  variant="outlined"
                 />
-              </Box>
-              <Box>
-                <TextField
-                  id="last-name"
-                  name="lastName"
-                  label="Last Name"
-                  value={lastName}
-                  onChange={props.handleChange}
-                  variant="outlined"
-                />
-              </Box>
-              <Box>
-                <TextField
-                  id="age"
-                  name="age"
-                  label="age"
-                  value={age}
-                  onKeyDown={props.handleDelete}
-                  onChange={props.handleChange}
-                  variant="outlined"
-                />
-              </Box>
-              <Box>
-                <FormControl>
-                <Box>
-                      {imagePreview && (
-                        <img
-                          style={{ height: "90px", width: "90px" }}
-                          src={imagePreview}
-                          alt="Preview"
-                        />
-                      )}
-                    </Box>
-                  <Box>
-                    <Input
-                      id="photo-upload"
-                      name="image"
-                      type="file"
-                      onChange={props.handleChange}
-                    />
-                  </Box>
-                </FormControl>
-              </Box>
-            </form>
-          </Box>
+              </FormControl>
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={props.handleSubmit}>
-            Save changes
+          <Button
+            variant="contained"
+            autoFocus
+            onClick={(e) => props.handleSubmit(e, props.data)}
+          >
+            {constant.form.Submit}
           </Button>
         </DialogActions>
       </BootstrapDialog>
